@@ -1,4 +1,7 @@
 from pydantic import BaseModel
+from enum import Enum
+from typing import Optional
+
 
 class RequestsFile(BaseModel):
     order_id: str
