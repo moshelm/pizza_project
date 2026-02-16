@@ -1,7 +1,7 @@
 from confluent_kafka import Consumer
 import os
-import connection_mongo as mongo 
-from connection_redis import manager_redis
+import kitchen.app.connection_mongo as mongo 
+from kitchen.app.connection_redis import manager_redis
 
 KAFKA = os.getenv("KAFKA","local:9092")
 CONFIG_CONSUMER = {
