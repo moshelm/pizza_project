@@ -3,7 +3,8 @@ import json
 import db.connection as mongo
 from schemas import RequestsFile
 from pydantic import ValidationError
-
+from confluent_kafka import Producer
+from producer import insert_to_kafka
 
 router = APIRouter()
 
@@ -20,8 +21,9 @@ async def upload_json_file(file: UploadFile = File(...)):
     except json.JSONDecodeError as e:
         raise HTTPException(status_code=400, detail=f'error reading file {str(e)}')
     try: 
-        mongo.collection.insert_many(valid_data)
-        
+        for msg in valid_data:
+            mongo.collection.insert_one(msg)
+            insert_to_kafka(msg)       
         return {"massage":"success"}
     except Exception as e:
         raise HTTPException(status_code=400,detail=f"mongo failed {str(e)}")
