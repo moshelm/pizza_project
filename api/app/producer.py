@@ -17,4 +17,5 @@ def insert_to_kafka(data:dict):
     producer.produce(topic='pizza-orders',key=data.get("order_id"), value=json.dumps(data.encode('utf-8')), callback=delivery_report)
     producer.poll(0)
 
-producer.flush()
+def flush():
+    producer.flush()
