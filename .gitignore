@@ -2,10 +2,16 @@
 __pycache__/
 *.py[codz]
 *$py.class
-data/
+
 # C extensions
 *.so
+
+# files
+data/
 pizza_orders.json
+pizza_analysis_lists.json
+pizza_orders_2000.json
+pizza_prep.json
 # Distribution / packaging
 .Python
 build/
