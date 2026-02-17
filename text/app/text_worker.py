@@ -21,6 +21,7 @@ def subscribe():
             continue
         if msg.error():
             print(f'error in msg {msg.error()}')
+            continue
         key = msg.key().decode("utf-8")
         data = json.loads(msg.value().decode("utf-8"))
         dangers = ["allergy", "peanut", "gluten"]
