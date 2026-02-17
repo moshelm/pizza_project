@@ -16,7 +16,7 @@ consumer = Consumer(CONFIG_CONSUMER)
 def subscribe():
     consumer.subscribe(['pizza-orders'])
     while True:
-        msg = consumer.poll(15)
+        msg = consumer.poll()
         if msg is None:
             continue
         if msg.error():
