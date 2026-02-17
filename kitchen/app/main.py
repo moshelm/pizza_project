@@ -1,4 +1,4 @@
-from kitchen.app.kitchen_worker import subscribe
+from kitchen_worker import subscribe
 
 
 subscribe()
