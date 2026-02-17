@@ -24,9 +24,10 @@ def subscribe():
             continue
         print('Received message)' )
         key = msg.key().decode('utf-8')
-        value = msg.value().decode('utf-8')
-        doc = mongo.collection.find_one({"order_id":key})
-        doc['status'] = 'DELIVERED'
-        manager_redis.delete(key)
-        print(value)
+        mongo.collection.update_one(
+        {"order_id": key}, 
+        {"$set": {"status": "DELIVERED"}}
+        )
+        manager_redis.delete(f"order:{key}")
+        time.sleep(20)
         
