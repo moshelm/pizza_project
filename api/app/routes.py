@@ -31,7 +31,7 @@ async def upload_json_file(file: UploadFile = File(...)):
         raise HTTPException(status_code=400, detail=f'error reading file {str(e)}')
     
 @router.get("/order{order_id}",status_code=200)
-async def check_in_cache(order_id:int):
+async def check_in_cache(order_id:str):
     result_redis = manager_redis.get(f'order:{order_id}')
     if result_redis:
         return {"source": "redis_cache",'data':result_redis}
