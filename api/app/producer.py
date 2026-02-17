@@ -14,7 +14,7 @@ def delivery_report(err: Message, msg: Message):
         print(f'Message delivered to {msg.topic()}, {msg.partition()}')
 
 def insert_to_kafka(data:dict):
-    producer.produce(topic='pizza-orders',key=data.get("order_id"), value=json.dumps(data.encode('utf-8')), callback=delivery_report)
+    producer.produce(topic='pizza-orders',key=data["order_id"].encode('utf-8'), value=json.dumps(data).encode('utf-8'), callback=delivery_report)
     producer.poll(0)
 
 def flush():
