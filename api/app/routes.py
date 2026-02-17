@@ -1,6 +1,6 @@
 from fastapi import APIRouter,UploadFile,File, HTTPException 
 import json
-import api.app.db.connection_mongo as mongo
+import db.connection_mongo as mongo
 from schemas import RequestsFile
 from pydantic import ValidationError
 from producer import insert_to_kafka, flush
