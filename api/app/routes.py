@@ -34,14 +34,14 @@ async def upload_json_file(file: UploadFile = File(...)):
 async def check_in_cache(order_id:int):
     result_redis = manager_redis.get(f'order:{order_id}')
     if result_redis:
-        return {"source": "redis_cache"}
+        return {"source": "redis_cache",'data':result_redis}
     else:
         result_mongo = mongo.collection.find_one({"order_id":order_id})
         if result_mongo:
             result_mongo['_id']= str(result_mongo['_id'])
             manager_redis.setex(f'order:{order_id}', 60, json.dumps(result_mongo))
 
-            return {"source": "mongodb"}
+            return {"source": "mongodb",'data':result_mongo}
         else:
             raise HTTPException(status_code=400,detail="there is no order id in the system")
 
