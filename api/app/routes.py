@@ -5,6 +5,8 @@ from schemas import RequestsFile
 from pydantic import ValidationError
 from producer import insert_to_kafka, flush
 from db.connection_redis import manager_redis
+
+
 router = APIRouter()
 
 @router.post('/uploadfile',status_code=201)
@@ -19,7 +21,6 @@ async def upload_json_file(file: UploadFile = File(...)):
             valid_item['_id'] = str(valid_item['_id'])
             insert_to_kafka(valid_item) 
         flush()      
-
         return {"massage":"success"}
     
     except Exception as e:
