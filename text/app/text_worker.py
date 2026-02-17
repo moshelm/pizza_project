@@ -28,7 +28,8 @@ def subscribe():
         for dng in dangers:
             if dng in data["special_instructions"]:
                 data['allergies_flaged'] = True
-        clean_text = re.sub(r'[^\w\s]','',data["special_instructions"].upper())
+        clean_text = re.sub(r'[^a-zA-Z ]','',data["special_instructions"].upper())
+        clean_text = re.sub(r'\s+', ' ', clean_text).strip()
         data["cleaned_protocol"] =  clean_text    
 
         mongo.collection.replace_one(key,data)
