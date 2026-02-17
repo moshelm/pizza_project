@@ -1,10 +1,10 @@
 from fastapi import APIRouter,UploadFile,File, HTTPException 
 import json
-import db.connection_mongo as mongo
+import connections.connection_mongo as mongo
 from schemas import RequestsFile
 from pydantic import ValidationError
 from producer import insert_to_kafka, flush
-from db.connection_redis import manager_redis
+from connections.connection_redis import manager_redis
 
 
 router = APIRouter()
