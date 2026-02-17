@@ -3,6 +3,7 @@ import os
 import connection_mongo as mongo 
 import json 
 import re
+from bson import ObjectId
 
 KAFKA = os.getenv("KAFKA","localhost:9092")
 
@@ -31,5 +32,5 @@ def subscribe():
         clean_text = re.sub(r'[^a-zA-Z ]','',data["special_instructions"].upper())
         clean_text = re.sub(r'\s+', ' ', clean_text).strip()
         data["cleaned_protocol"] =  clean_text    
-
-        mongo.collection.replace_one(key,data)
+        data['_id']= ObjectId(data['_id'])
+        mongo.collection.replace_one({'order_id':key},data)
