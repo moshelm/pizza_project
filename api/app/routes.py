@@ -16,6 +16,7 @@ async def upload_json_file(file: UploadFile = File(...)):
             valid_item = RequestsFile(**item).model_dump()
             valid_item['status'] ="PREPARING"
             mongo.collection.insert_one(valid_item)
+            valid_item['_id'] = str(valid_item['_id'])
             insert_to_kafka(valid_item) 
         flush()      
 
