@@ -6,16 +6,7 @@ from bson import ObjectId
 from preprocessor import *
 
 
-KAFKA = os.getenv("KAFKA","localhost:9092")
-
-CONFIG = {
-    'bootstrap.servers': KAFKA, 
-     'group.id': 'text_team', 
-     'auto.offset.reset': 'earliest'
-     }
-consumer = Consumer(CONFIG)
-
-def subscribe():
+def subscribe(consumer:Consumer):
     consumer.subscribe(['pizza-orders'])
     try:
         while True:
