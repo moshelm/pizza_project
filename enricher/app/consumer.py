@@ -58,39 +58,36 @@ def status_by_kosher(fields:dict,order:dict):
 def get_data_of_pizza_analysis_lists():
     with open('pizza_analysis_lists.json', 'r') as file:
         return json.load(file)
+    
+def get_hits(data:dict, msg:str):
+    return  {"information":{
+            "common_allergens":is_hit(data["common_allergens"],msg),
+            "meat_ingredients": is_hit(data["meat_ingredients"],msg),
+            "dairy_ingredients":is_hit(data["dairy_ingredients"],msg),
+            "forbidden_non_kosher":is_hit(data["forbidden_non_kosher"],msg)
+            }
+            }
+    
 
-def get_hits(fields : dict[str:bool], data : dict[list], msg : str) -> dict[str:list]:
+def logic_status(fields : dict[str:bool], data : dict[str:dict[str:list]]) -> dict[str:list]:
         meat_and_dairy = None
-        hits_allergens = is_hit(data["common_allergens"],msg)
-        hits_meat = is_hit(data["meat_ingredients"],msg)
-        hits_dairy = is_hit(data["dairy_ingredients"],msg)
-        hits_kosher = is_hit(data["forbidden_non_kosher"],msg)
 
-        if hits_allergens:
+        if data['information']["common_allergens"]:
             fields['is_allergens'] = True
         
-        if hits_meat:
+        if data['information']["meat_ingredients"]:
             fields['is_meat'] = True
             meat_and_dairy = False
 
-        if hits_dairy:
+        if data['information']["dairy_ingredients"]:
             fields['is_dairy'] = True
             if meat_and_dairy == False:
                 meat_and_dairy = True
             else:
                 meat_and_dairy = False
 
-        if not meat_and_dairy or not hits_kosher:
+        if not meat_and_dairy or not data['information']["forbidden_non_kosher"]:
             fields['is_kosher'] = True
-        
-        info = {"information":{
-            "common_allergens":hits_allergens,
-            "meat_ingredients": hits_meat,
-            "dairy_ingredients":hits_dairy,
-            "forbidden_non_kosher":hits_kosher
-            }
-            }
-        return info
 
         
 def is_hit(data:list, msg:str):
