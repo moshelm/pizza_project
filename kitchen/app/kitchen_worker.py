@@ -16,6 +16,7 @@ consumer = Consumer(CONFIG_CONSUMER)
 def subscribe():
     consumer.subscribe(['pizza-orders'])
     while True:
+        time.sleep(20)
         msg = consumer.poll()
         if msg is None:
             continue
@@ -35,5 +36,5 @@ def subscribe():
         
         manager_redis.delete(f"order:{key}")
         
-        time.sleep(20)
+        
         
