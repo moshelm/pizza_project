@@ -13,19 +13,37 @@ def run_logic(consumer: Consumer):
             print(f'error in msg {msg.error()}')
             continue
         key = msg.key().decode("utf-8")
-        data : dict = json.loads(msg.value().decode("utf-8"))
-        fields, info = start_logic()
-        data.update(fields)
-        mongo.collection.replace_one({'order_id':key},data)
-        manager_redis.setex(f'type:{data['pizza_type']}',20, json.dumps(info))
-        
-def start_logic(order:dict) -> tuple[dict,dict]:
-    fields = {
+        data_from_kafka : dict = json.loads(msg.value().decode("utf-8"))
+
+        # fields for analysis
+        fields_analysis = {
         'is_kosher':False,
         "is_allergens":False,
         "is_meat":False,
         "is_dairy":True
         }
+
+        # get analysis from redis 
+        redis_result = manager_redis.get(f'type:{data_from_kafka['pizza_type']}')
+
+        if redis_result:
+            data_hits = redis_result
+
+        else:
+            # there is no in cache, create it 
+            data_hits = start_logic(data_from_kafka,fields_analysis)
+            # send to redis
+            manager_redis.setex(f'type:{data_from_kafka['pizza_type']}',20, json.dumps(data_hits))
+
+        # analysis the information
+        logic_status(fields_analysis, data_hits)
+        status_by_kosher(fields_analysis, data_from_kafka)
+        data_from_kafka.update(fields_analysis)
+
+        # update in mongodb
+        mongo.collection.replace_one({'order_id':key}, data_from_kafka)
+        
+def start_logic(order:dict):
     analysis_data = get_data_of_pizza_analysis_lists()
     info = get_hits(fields, analysis_data, order["information"])
     status_by_kosher(fields, order)
