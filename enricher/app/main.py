@@ -1,7 +1,6 @@
-from text_worker import subscribe
-import os 
+from consumer import run_logic
+import os
 from confluent_kafka import Consumer
-
 
 KAFKA = os.getenv("KAFKA","localhost:9092")
 
@@ -10,7 +9,6 @@ CONFIG = {
      'group.id': 'text_team', 
      'auto.offset.reset': 'earliest'
      }
-
 consumer = Consumer(CONFIG)
 
-subscribe(consumer)
+run_logic(consumer)
