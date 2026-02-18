@@ -25,7 +25,7 @@ def get_info_by_pizza_type(pizza_type: str) -> str | None:
     with open('pizza_prep.json','r') as file:
         data : dict = json.load(file)
         for key in  data.keys():
-            if key == pizza_type:
-                return data[key]
-        return None
+            if pizza_type in key:
+                return data[key]    
+        return ''
 
