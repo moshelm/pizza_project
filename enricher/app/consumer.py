@@ -1,19 +1,9 @@
-import os 
 import json 
 from confluent_kafka import Consumer
-import connection_mongo as mongo
-from connection_redis import manager_redis
+import connections.connection_mongo as mongo
+from connections.connection_redis import manager_redis
 
-KAFKA = os.getenv("KAFKA","localhost:9092")
-
-CONFIG = {
-    'bootstrap.servers': KAFKA, 
-     'group.id': 'text_team', 
-     'auto.offset.reset': 'earliest'
-     }
-consumer = Consumer(CONFIG)
-
-def subscribe():
+def run_logic(consumer: Consumer):
     consumer.subscribe(['cleaned-instructions'])
     while True:
         msg = consumer.poll()
