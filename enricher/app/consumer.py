@@ -28,17 +28,17 @@ def run_logic(consumer: Consumer):
             "is_dairy":False
             }
 
-        # get analysis from redis 
-        redis_result = manager_redis.get(f'type:{data_from_kafka['pizza_type']}')
+            # get analysis from redis 
+            redis_result = manager_redis.get(f'type:{data_from_kafka['pizza_type']}')
 
-        if redis_result:
-            data_hits = redis_result
+            if redis_result:
+                data_hits = json.loads(redis_result)
 
-        else:
-            # there is no in cache, create it 
-            data_hits = start_logic(data_from_kafka,fields_analysis)
-            # send to redis
-            manager_redis.setex(f'type:{data_from_kafka['pizza_type']}',20, json.dumps(data_hits))
+            else:
+                # there is no in cache, create it 
+                data_hits = start_logic(data_from_kafka)
+                # send to redis
+                manager_redis.setex(f'type:{data_from_kafka['pizza_type']}',5, json.dumps(data_hits))
 
         # analysis the information
         logic_status(fields_analysis, data_hits)
