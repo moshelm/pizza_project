@@ -37,7 +37,7 @@ def start_logic(order:dict) -> tuple[dict,dict]:
         "is_dairy":True
         }
     analysis_data = get_data_of_pizza_analysis_lists()
-    info = get_hits(fields, analysis_data, order["pizza_info_demo"])
+    info = get_hits(fields, analysis_data, order["information"])
     status_by_kosher(fields, order)
     return fields, info
 
