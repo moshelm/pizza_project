@@ -66,13 +66,14 @@ def get_data_of_pizza_analysis_lists():
         return json.load(file)
     
 def get_hits(data:dict, msg:str):
-    return  {"information":{
+    data = {"information":{
             "common_allergens":is_hit(data["common_allergens"],msg),
             "meat_ingredients": is_hit(data["meat_ingredients"],msg),
             "dairy_ingredients":is_hit(data["dairy_ingredients"],msg),
             "forbidden_non_kosher":is_hit(data["forbidden_non_kosher"],msg)
             }
             }
+    return data
     
 
 def logic_status(fields : dict[str,bool], data : dict[str,dict[str,list]]) -> dict[str:list]:
