@@ -1,6 +1,5 @@
 from confluent_kafka import Consumer
 import os 
-import connection_mongo as mongo 
 import json 
 import re
 from bson import ObjectId
