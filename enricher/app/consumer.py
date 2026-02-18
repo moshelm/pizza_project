@@ -6,12 +6,15 @@ from connections.connection_redis import manager_redis
 def run_logic(consumer: Consumer):
     consumer.subscribe(['cleaned-instructions'])
     while True:
+        # polling from kafka
         msg = consumer.poll()
+        # error handling
         if msg is None:
             continue
         if msg.error():
             print(f'error in msg {msg.error()}')
             continue
+        # convert bytes
         key = msg.key().decode("utf-8")
         data_from_kafka : dict = json.loads(msg.value().decode("utf-8"))
 
