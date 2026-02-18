@@ -2,7 +2,6 @@ from confluent_kafka import Consumer
 import os 
 import json 
 import re
-from bson import ObjectId
 from preprocessor import *
 
 
@@ -39,7 +38,6 @@ def subscribe(consumer:Consumer):
 def logic_text_worker(data:dict):
     is_danger(data)
     data["cleaned_protocol"] =  clean_data(data["special_instructions"])    
-    data['_id']= ObjectId(data['_id'])
 
 
 def is_danger(data:dict):
