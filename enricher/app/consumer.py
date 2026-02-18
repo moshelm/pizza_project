@@ -74,25 +74,22 @@ def get_hits(data:dict, msg:str):
             }
     
 
-def logic_status(fields : dict[str:bool], data : dict[str:dict[str:list]]) -> dict[str:list]:
-        meat_and_dairy = None
+def logic_status(fields : dict[str,bool], data : dict[str,dict[str,list]]) -> dict[str:list]:
+        
 
         if data['information']["common_allergens"]:
             fields['is_allergens'] = True
         
         if data['information']["meat_ingredients"]:
             fields['is_meat'] = True
-            meat_and_dairy = False
+            
 
         if data['information']["dairy_ingredients"]:
             fields['is_dairy'] = True
-            if meat_and_dairy == False:
-                meat_and_dairy = True
-            else:
-                meat_and_dairy = False
+            
 
-        if not meat_and_dairy or not data['information']["forbidden_non_kosher"]:
-            fields['is_kosher'] = True
+        if (fields['is_dairy'] and fields['is_meat']) or  data['information']["forbidden_non_kosher"]:
+            fields['is_kosher'] = False
 
         
 def is_hit(data:list, msg:str):
