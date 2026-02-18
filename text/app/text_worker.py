@@ -24,7 +24,9 @@ def subscribe(consumer:Consumer):
             
             # clean and logic data 
             logic_text_worker(data)
+
             data_info = get_info_by_pizza_type(data['pizza_type'])
+            
             data_info = clean_data(data_info)
             data['information'] = data_info
             insert_to_kafka(data)
