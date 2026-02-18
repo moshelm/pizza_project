@@ -32,7 +32,7 @@ services:
       - kafka_kraft:/var/lib/kafka/data
 
   mongo:
-    image: mongo:7.0
+    image: mongo:7
     container_name: mongo
     ports: 
       - "27017:27017"
