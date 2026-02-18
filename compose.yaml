@@ -32,7 +32,7 @@ services:
       - kafka_kraft:/var/lib/kafka/data
 
   mongo:
-    image: mongo:7.0
+    image: mongo:7
     container_name: mongo
     ports: 
       - "27017:27017"
@@ -107,6 +107,25 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+  enricher:
+    build: ./enricher
+    container_name: enricher
+    environment:
+      KAFKA: "kafka:9092"
+      REDIS_HOST: "redis"
+      REDIS_PORT: "6379"
+      MONGO_HOST: "mongo"
+      MONGO_PORT: "27017"
+      MONGO_DATABASE: "pizza_db"
+      MONGO_COLLECTION: "orders"
+    depends_on:
+      mongo:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
 
 volumes:
   kafka_kraft:

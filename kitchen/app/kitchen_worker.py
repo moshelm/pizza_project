@@ -1,7 +1,7 @@
 from confluent_kafka import Consumer
 import os
-import connection_mongo as mongo 
-from connection_redis import manager_redis
+import connections.connection_mongo as mongo 
+from connections.connection_redis import manager_redis
 import time
 
 KAFKA = os.getenv("KAFKA","local:9092")
@@ -16,6 +16,7 @@ consumer = Consumer(CONFIG_CONSUMER)
 def subscribe():
     consumer.subscribe(['pizza-orders'])
     while True:
+        time.sleep(20)
         msg = consumer.poll()
         if msg is None:
             continue
@@ -23,11 +24,17 @@ def subscribe():
             print("Consumer error: {}".format(msg.error()))
             continue
         print('Received message)' )
+
         key = msg.key().decode('utf-8')
-        mongo.collection.update_one(
-        {"order_id": key}, 
-        {"$set": {"status": "DELIVERED"}}
-        )
+
+        doc = mongo.collection.find_one({"order_id":key})
+        if doc['status'] != "BURNT":
+            mongo.collection.update_one(
+            {"order_id": key}, 
+            {"$set": {"status": "DELIVERED"}}
+            )
+        
         manager_redis.delete(f"order:{key}")
-        time.sleep(20)
+        
+        
         
