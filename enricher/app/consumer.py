@@ -18,14 +18,15 @@ def run_logic(consumer: Consumer):
         # convert bytes
         key = msg.key().decode("utf-8")
         data_from_kafka : dict = json.loads(msg.value().decode("utf-8"))
-
-        # fields for analysis
-        fields_analysis = {
-        'is_kosher':False,
-        "is_allergens":False,
-        "is_meat":False,
-        "is_dairy":True
-        }
+        
+        if data_from_kafka['information'] != '':
+            # fields for analysis
+            fields_analysis = {
+            'is_kosher':True,
+            "is_allergens":False,
+            "is_meat":False,
+            "is_dairy":False
+            }
 
         # get analysis from redis 
         redis_result = manager_redis.get(f'type:{data_from_kafka['pizza_type']}')
