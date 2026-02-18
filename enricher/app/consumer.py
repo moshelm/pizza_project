@@ -40,10 +40,10 @@ def run_logic(consumer: Consumer):
                 # send to redis
                 manager_redis.setex(f'type:{data_from_kafka['pizza_type']}',5, json.dumps(data_hits))
 
-        # analysis the information
-        logic_status(fields_analysis, data_hits)
-        status_by_kosher(fields_analysis, data_from_kafka)
-        data_from_kafka.update(fields_analysis)
+            # analysis the information
+            logic_status(fields_analysis, data_hits)
+            status_by_kosher(fields_analysis, data_from_kafka)
+            data_from_kafka.update(fields_analysis)
 
         # update in mongodb
         data_from_kafka['_id'] = ObjectId(data_from_kafka['_id'])
