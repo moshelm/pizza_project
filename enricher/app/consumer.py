@@ -95,6 +95,6 @@ def logic_status(fields : dict[str,bool], data : dict[str,dict[str,list]]) -> di
 def is_hit(data:list, msg:str):
     hits = []
     for product in data:
-        if product in msg:
+        if product in msg.lower():
             hits.append(product)
     return hits
