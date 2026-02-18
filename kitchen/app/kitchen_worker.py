@@ -23,11 +23,17 @@ def subscribe():
             print("Consumer error: {}".format(msg.error()))
             continue
         print('Received message)' )
+
         key = msg.key().decode('utf-8')
-        mongo.collection.update_one(
-        {"order_id": key}, 
-        {"$set": {"status": "DELIVERED"}}
-        )
+
+        doc = mongo.collection.find_one({"order_id":key})
+        if doc['status'] != "BURNT":
+            mongo.collection.update_one(
+            {"order_id": key}, 
+            {"$set": {"status": "DELIVERED"}}
+            )
+        
         manager_redis.delete(f"order:{key}")
+        
         time.sleep(20)
         
