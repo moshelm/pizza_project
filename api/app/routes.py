@@ -26,9 +26,14 @@ async def upload_json_file(file: UploadFile = File(...)):
         for item in data:
             valid_item = RequestsFile(**item).model_dump()
             valid_item['status'] ="PREPARING"
+            
+            # insert to mongo 
             mongo.collection.insert_one(valid_item)
             valid_item['_id'] = str(valid_item['_id'])
+            
+            # insert to kafka
             insert_to_kafka(valid_item) 
+        
         flush()      
         return {"massage":"success"}
     
@@ -55,5 +60,7 @@ async def check_in_cache(order_id:str):
             return {"source": "mongodb",'data':result_mongo}
         else:
             raise HTTPException(status_code=400,detail="there is no order id in the system")
+        
+
 
 
