@@ -45,9 +45,9 @@ def run_logic(consumer: Consumer):
         
 def start_logic(order:dict):
     analysis_data = get_data_of_pizza_analysis_lists()
-    info = get_hits(fields, analysis_data, order["information"])
-    status_by_kosher(fields, order)
-    return fields, info
+    data_hits = get_hits(analysis_data, order["information"])
+    return data_hits
+    
 
 def status_by_kosher(fields:dict,order:dict):
     if not fields['is_kosher']:
