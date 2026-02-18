@@ -2,6 +2,7 @@ import json
 from confluent_kafka import Consumer
 import connections.connection_mongo as mongo
 from connections.connection_redis import manager_redis
+from bson import ObjectId
 
 def run_logic(consumer: Consumer):
     consumer.subscribe(['cleaned-instructions'])
@@ -44,6 +45,7 @@ def run_logic(consumer: Consumer):
         data_from_kafka.update(fields_analysis)
 
         # update in mongodb
+        data_from_kafka['_id'] = ObjectId(data_from_kafka['_id'])
         mongo.collection.replace_one({'order_id':key}, data_from_kafka)
         
 def start_logic(order:dict):
