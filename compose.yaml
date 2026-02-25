@@ -96,16 +96,9 @@ services:
     container_name: text 
     environment:
       KAFKA: "kafka:9092"
-      MONGO_HOST: "mongo"
-      MONGO_PORT: "27017"
-      MONGO_DATABASE: "pizza_db"
-      MONGO_COLLECTION: "orders"
+
     depends_on:
-      mongo:
-        condition: service_healthy
       kafka:
-        condition: service_healthy
-      redis:
         condition: service_healthy
   enricher:
     build: ./enricher
