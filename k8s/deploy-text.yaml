@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: text
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: text
+  template:
+    metadata:
+      labels:
+        app: text
+    spec:
+      containers:
+      - name: text
+        image: moshe5434/text-pizza:v1
+        env:
+        - name: KAFKA
+          value: "kafka:9092"
